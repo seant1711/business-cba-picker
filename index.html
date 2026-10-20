@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Business CBA Topic Picker</title>
+<meta name="description" content="Pick your Junior Cycle Business Studies CBA topic: CBA 1 Business in Action or CBA 2 Presentation. Get a brief, focus questions, a checklist and source links.">
+<meta name="theme-color" content="#b3202a">
+<style>
+:root{
+  --bg:#faf7f2; --card:#ffffff; --ink:#1d1b1a; --muted:#6a6560; --line:#e6dfd5;
+  --red:#b3202a; --red-ink:#ffffff; --soft:#f6e9e6;
+  --ent:#1f6f5c; --eco:#1f4e8c; --fin:#b7500e;
+  --a1:#1f6f5c; --a2:#b7500e; --a3:#1f4e8c; --a4:#7b2d8b; --a5:#a3283c; --a6:#0e7c7b; --a7:#5a6b1f;
+  --radius:16px; --shadow:0 1px 2px rgba(0,0,0,.06),0 6px 18px rgba(60,40,20,.07);
+  --accent:var(--red);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#17120f; --card:#211a16; --ink:#f3ece4; --muted:#b0a69b; --line:#3a2f28; --soft:#33201d; --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17120f; --card:#211a16; --ink:#f3ece4; --muted:#b0a69b; --line:#3a2f28; --soft:#33201d; --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px calc(48px + env(safe-area-inset-bottom))}
+header.top{padding:calc(16px + env(safe-area-inset-top)) 0 8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:800;letter-spacing:.02em;font-size:15px}
+.brand b{color:var(--red)}
+.theme{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 12px;font-size:14px;cursor:pointer;min-height:40px}
+.steps{display:flex;gap:6px;margin:6px 0 18px}
+.steps span{flex:1;height:6px;border-radius:99px;background:var(--line)}
+.steps span.on{background:var(--accent)}
+.steplabel{font-size:13px;color:var(--muted);margin:0 0 4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+h1{font-size:clamp(26px,6vw,36px);line-height:1.15;margin:4px 0 8px;letter-spacing:-.01em}
+h2{font-size:20px;margin:26px 0 10px}
+h3{font-size:17px;margin:0 0 6px}
+p{margin:0 0 12px}
+.lead{color:var(--muted);font-size:17px}
+.grid{display:grid;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+button.card,a.card{display:block;width:100%;text-align:left;color:inherit;font:inherit;text-decoration:none;cursor:pointer}
+button.card:hover,a.card:hover{border-color:var(--accent)}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.big{border-left:8px solid var(--accent);padding:18px 16px}
+.big .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.big h3{font-size:22px}
+.meta{color:var(--muted);font-size:14px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;margin:0 -16px;padding-left:16px;padding-right:16px;scrollbar-width:thin}
+.chip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 14px;font:inherit;font-size:15px;cursor:pointer;min-height:44px;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.topic{display:flex;gap:12px;align-items:flex-start;border-left:6px solid var(--accent)}
+.topic .id{flex:0 0 auto;font-weight:800;color:var(--accent);min-width:34px}
+.topic h3{margin:0 0 2px}
+.topic p{margin:0;color:var(--muted);font-size:15px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+.btn{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:11px 16px;font:inherit;font-size:15px;cursor:pointer;min-height:46px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.back{margin:2px 0 6px}
+.q{display:grid;grid-template-columns:56px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.q:first-child{border-top:0}
+.q .w{font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);padding-top:2px}
+.q p{margin:0}
+.callout{border-radius:12px;padding:12px 14px;margin:12px 0;background:var(--soft);border-left:6px solid var(--accent)}
+.callout.warn{background:#fff3cd;border-color:#bf8f00;color:#3a2f00}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .callout.warn{background:#3b3010;color:#f3e6b8}}
+:root[data-theme="dark"] .callout.warn{background:#3b3010;color:#f3e6b8}
+.check{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line);cursor:pointer}
+.check:first-of-type{border-top:0}
+.check input{width:24px;height:24px;margin:1px 0 0;accent-color:var(--accent);flex:0 0 auto}
+.check span{flex:1}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:6px 0 10px}
+.progress i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+ul.links{list-style:none;padding:0;margin:0}
+ul.links li{border-top:1px solid var(--line);padding:10px 0}
+ul.links li:first-child{border-top:0}
+ul.links a{color:var(--accent);font-weight:600;word-break:break-word}
+ul.links small{display:block;color:var(--muted)}
+details{border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--card);margin:12px 0}
+summary{cursor:pointer;font-weight:600;min-height:32px}
+footer{margin-top:36px;color:var(--muted);font-size:13px;text-align:center}
+.noscript{padding:20px}
+@media print{
+  body{background:#fff;color:#000}
+  header.top,.steps,.row,.theme,.chips,.back,footer .hide-print{display:none!important}
+  .card,details{box-shadow:none;break-inside:avoid}
+  details{display:block}
+  details>*{display:block}
+}
+@media (min-width:640px){
+  .grid.two{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">BUSINESS <b>CBA</b> TOPIC PICKER</div>
+    <button class="theme" id="theme" type="button" aria-label="Switch light or dark mode">Light / dark</button>
+  </header>
+  <div class="steps" id="steps" aria-hidden="true"><span></span><span></span><span></span></div>
+  <main id="app" tabindex="-1"><noscript><p class="noscript">This page needs JavaScript to work. Please turn it on and refresh.</p></noscript></main>
+  <footer>
+    <p>Made by Seán Treacy for Junior Cycle Business Studies students. A starting point only: always agree your topic with your teacher.</p>
+    <p class="hide-print">Based on the NCCA Junior Cycle Business Studies Guidelines for the Classroom-Based Assessments and Assessment Task. Check curriculumonline.ie for the latest version.</p>
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* ---------------------------------------------------------------
+   DATA
+   CBA 1 topics: [id, short title, task, research ideas, action plan produces, who, where, when]
+   CBA 2 topics: [id, short title, question, original research, reflection it could lead to, who, where, when]
+---------------------------------------------------------------- */
+var CBA1 = {
+  enterprise: { name: "Enterprise in Action", color: "var(--ent)", blurb: "Plan a new product, service, event or marketing idea for a real or imagined business.",
+    sources: [
+      ["Local Enterprise Offices", "https://www.localenterprise.ie", "Supports for small businesses, plus ideas on starting out"],
+      ["Enterprise Ireland", "https://www.enterprise-ireland.com", "Irish business case studies and how firms grow"],
+      ["CCPC (consumer and competition)", "https://www.ccpc.ie", "Pricing, advertising rules and consumer rights"],
+      ["CSO Ireland", "https://www.cso.ie", "Official statistics on population, spending and businesses"],
+      ["Revenue.ie", "https://www.revenue.ie", "VAT and tax basics for businesses"]
+    ],
+    extra: ["Compared at least three competitors", "Surveyed my target market (and kept it anonymous)", "Costed every part of the plan", "Justified each part of the marketing mix with a finding"],
+    rows: [
+      ["E1","Café marketing mix","Create a new marketing mix for a local café, takeaway or ice-cream shop.","Observe the shop and compare at least three competitors. Survey customers on price, product and promotion. Desk research on competitors' websites and social media.","A new product, price, place and promotion plan, each justified by findings","Who are the customers and who are the competitors?","Where is the business and where do customers find it?","When are its busy and quiet times?"],
+      ["E2","Reusable cup scheme","Design a reusable-cup or packaging scheme for a local takeaway.","Survey customers on willingness to use and pay. Research costs of reusable or compostable options and what other businesses do. Interview the owner if possible.","A costed scheme with expected savings or income and a promotion plan","Who will use the scheme and who pays for it?","Where will cups be collected, washed and returned?","When would the scheme start and how long before it pays back?"],
+      ["E3","Tuck shop new product","Plan a new product line for the school canteen or tuck shop.","Survey students and staff on what they want and what they would pay. Research suppliers, costs and healthy-eating guidelines. Compare a competitor shop nearby.","A product, pricing and promotion plan with costs and expected profit","Who are the customers: students, staff, both?","Where will the product be stocked and promoted?","When is demand highest (breaks, exam weeks)?"],
+      ["E4","New target market","Take a local product or craft to a new target market (such as teenagers or tourists).","Research the current market and the new market. Survey the new group. Compare how similar products are sold to that market.","A revised marketing mix aimed at the new market, with costs","Who is the new target market and what do they want?","Where do they shop, browse and spend time?","When do they buy (seasons, events, weekends)?"],
+      ["E5","School fundraising event","Plan and run a school fundraising event for a chosen cause.","Research what similar events cost and raise. Survey likely attendees. Check rules and approvals with your teacher.","An event plan with budget, promotion and a record of inputs and outputs if run","Who is it for, who helps and who approves it?","Where will it be held and where will it be promoted?","When is the best date and what is the timeline?"],
+      ["E6","Student-run service","Create a business plan for a student-run service (such as a study-skills or recycling service).","Research demand and who else offers it. Survey the target group on need and price. Interview an adult who runs a similar service.","A service plan with price, promotion and a simple break-even calculation","Who needs the service and who else offers it?","Where will it run and where will customers hear about it?","When will it run and when will it break even?"],
+      ["E7","Seasonal market stall","Plan a seasonal stall for a school or community market.","Compare stalls at a market you visit. Research costs of materials and what sells. Survey shoppers on what they would buy.","A stall plan with stock, prices and expected income, and a record if run","Who are the shoppers at this market?","Where is the market and where does the stall sit?","When is the season and what is the setup time?"],
+      ["E8","Club membership drive","Create a membership-drive promotion for a local sports or youth club.","Survey young people on why they join or leave. Research what other clubs do. Interview a club officer.","A promotion plan with budget, message and ways to measure success","Who are the potential members and who decides for them?","Where will you reach them (school, social media, community)?","When is the best time to launch the drive?"],
+      ["E9","Business idea from abroad","Adapt a successful business idea from abroad for the Irish market.","Research the original business and the Irish market. Compare local competitors. Survey potential customers on interest and price.","A product and marketing plan adapted to Irish tastes and costs","Who are the Irish customers and how do they differ?","Where did the idea come from and where would it open here?","When did it succeed abroad and what is the right timing here?"],
+      ["E10","Teen pop-up shop","Plan a pop-up shop or stand at a local event for teenagers.","Research what teens buy and where. Survey the target group. Research costs of space, stock and rules for selling.","A pop-up plan with stock, price, place, promotion and a budget","Who are the teenage customers and who runs the stand?","Where is the event and where is the stand?","When is the event and how long will the stand run?"]
+    ]},
+  economics: { name: "Economics in Action", color: "var(--eco)", blurb: "Research a real economic issue, weigh the benefits and costs, and recommend what should be done.",
+    sources: [
+      ["CSO Ireland", "https://www.cso.ie", "Official figures on prices, jobs, trade and housing"],
+      ["gov.ie", "https://www.gov.ie", "Government departments, policies and reports"],
+      ["ESRI", "https://www.esri.ie", "Independent Irish economic research"],
+      ["Irish Fiscal Advisory Council", "https://www.fiscalcouncil.ie", "Independent commentary on public finances"],
+      ["European Union", "https://european-union.europa.eu", "Official EU information"],
+      ["SEAI", "https://www.seai.ie", "Energy and renewable energy information"]
+    ],
+    extra: ["Used both desk research and field research (such as a survey)", "Showed at least one graph or table of results", "Looked at the issue from more than one stakeholder's view", "Made a clear recommendation and said who gains and who pays"],
+    rows: [
+      ["EC1","EU or euro membership","Research the benefits and challenges of Ireland's membership of the EU (or the euro) for one group, such as farmers, exporters or consumers.","Choose one aspect (trade, the euro, farming support, workers' rights). Survey adults on what they know. Compare Ireland with other EU countries on a chosen indicator.","A policy recommendation for how Ireland should use or respond to the aspect","Which group is affected: farmers, exporters, consumers?","Where does the effect show up: Ireland, the EU, one sector?","When did the change start and how has it developed?"],
+      ["EC2","Multinationals in Ireland","Research the benefits and challenges of foreign multinational companies in Ireland.","Compare jobs, tax income and risks. Interview a worker or business owner. Use official statistics on employment and trade.","A policy to increase benefits or reduce dependence on a few firms","Who gains and who is at risk: workers, government, local firms?","Where are the firms based and where do the profits go?","When did they arrive and what could change in the future?"],
+      ["EC3","Tourism in a region","Research the benefits and costs of tourism for a named town or region.","List benefits and costs for residents, businesses and the environment. Survey locals and interview a business owner. Use visitor and employment figures.","A tourism policy that keeps the benefits and reduces the costs","Who benefits and who bears the costs?","Where are the visitors and where are the pressure points?","When is the season and what happens in the off-season?"],
+      ["EC4","Minimum wage","Research how a rise in the minimum wage affects workers and employers.","Compare the views of workers, small businesses and government. Use earnings and employment figures. Interview an employer and an employee.","A recommended wage policy with who gains and who pays","Who is paid the minimum wage and who employs them?","Where are minimum-wage jobs most common?","When did it last rise and what happened afterwards?"],
+      ["EC5","Rents and house prices","Research how high rents and house prices affect young workers and local businesses in your area.","Compare rent and earnings figures. Survey adults on how housing costs affect them. Look at different stakeholders (tenants, landlords, employers).","A housing policy that helps supply and affordability, with trade-offs","Who is affected: tenants, buyers, landlords, employers?","Where is the pressure greatest: your town, your region, cities?","When did prices start to rise and how long has it lasted?"],
+      ["EC6","Cost of everyday goods","Research how the rising cost of everyday goods affects households in your area.","Compare prices of a basket of goods over time. Survey households. Use inflation figures and compare with earnings.","A policy to protect lower-income households, with who pays","Who is hit hardest: low-income households, families, pensioners?","Where do people shop and where have prices risen most?","When did prices change and how fast?"],
+      ["EC7","Public transport","Research the benefits and costs of improving public transport in a region.","Compare costs, jobs, travel times and emissions. Survey commuters. Interview a transport user and a business.","A transport policy with a costed plan and measure of success","Who uses public transport and who pays for it?","Where is service poor and where is demand highest?","When are the busiest times and how long would it take to build?"],
+      ["EC8","Environmental charges","Research whether environmental charges (such as a charge on plastic bags or single-use items) change behaviour.","Survey people on whether the charge changed their habits. Compare before and after figures. Consider effects on shops and the environment.","A policy for a new environmental charge or a change to an existing one","Who pays the charge and who benefits?","Where does the charge apply: shops, households, businesses?","When did it start and what changed before and after?"],
+      ["EC9","Renewable energy","Research how the growth of renewable energy affects jobs and electricity prices in a region.","Compare benefits and costs for households, workers, farmers and the environment. Interview a local resident. Use energy and employment figures.","A policy for balancing local benefits with local concerns","Who gains jobs and who has concerns: residents, farmers, households?","Where are the projects and where is the power used?","When were they built and what is planned next?"],
+      ["EC10","Trade with the UK","Research how trade with the UK affects Irish businesses and consumers.","Choose one sector, such as food or retail. Compare costs and prices. Interview a business owner. Use trade figures.","A policy to help Irish firms trade and to protect consumers","Who trades with the UK: exporters, importers, consumers?","Where do the goods move: ports, borders, supply chains?","When did the rules change and what is the effect now?"]
+    ]},
+  finance: { name: "Finance in Action", color: "var(--fin)", blurb: "Build a realistic (invented) household or group case, compare options and recommend the best way to fund it.",
+    sources: [
+      ["CCPC consumer information", "https://www.ccpc.ie", "Comparing loans, savings and insurance in plain language"],
+      ["Central Bank consumer hub", "https://www.centralbank.ie/consumer-hub", "Protecting your money and understanding financial products"],
+      ["MABS (money advice)", "https://www.mabs.ie", "Free, independent money advice and budgeting guides"],
+      ["Citizens Information", "https://www.citizensinformation.ie", "Tax, pay, renting and everyday rights"],
+      ["Irish League of Credit Unions", "https://www.creditunion.ie", "Credit union savings and loans"],
+      ["SEAI grants", "https://www.seai.ie", "Home energy upgrade grants and information"],
+      ["Revenue.ie", "https://www.revenue.ie", "Income tax and take-home pay"]
+    ],
+    extra: ["Used an invented case, not a real family's finances", "Compared at least three sources of finance with the total repayable", "Built a budget or cash-flow forecast", "Showed the risks of my recommended option"],
+    rows: [
+      ["F1","Replace the family car","A household must replace its car within a set time. Research the sources of finance available.","Compare bank and credit union loans, hire purchase and PCP using regulated websites. Compare interest rates and total repayable. Check scrappage values and affordability.","A budget and a recommended source of finance with reasons","Who is the household and what do they earn and need?","Where would the money come from: bank, credit union, dealer?","When must the car be replaced and over how long is it repaid?"],
+      ["F2","Heating or insulation","A family needs to replace its heating system or improve home insulation. Research how to pay for it.","Compare cost of options, running costs, grants, loans and savings. Use official energy-efficiency information. Calculate payback time.","A funded plan with before-and-after costs","Who lives in the home and who pays?","Where is the work needed and where can grants be found?","When will the work be done and when does it pay for itself?"],
+      ["F3","First-year budget","A school-leaver starts a first job. Plan their first-year budget.","Research gross and net pay, tax, rent and transport costs. Compare saving options. Interview an adult about first-job costs.","A monthly budget with a savings plan and a risk plan","Who is the school-leaver and what is the job?","Where do they live and how do they travel?","When are costs due (monthly, annually) and when do they save?"],
+      ["F4","Club equipment funding","A sports club needs new equipment or facilities. Research how it could fund the cost.","Compare fundraising, grants, membership increases and loans. Interview a club officer. Use published club accounts.","A funding plan with income sources, costs and a timeline","Who runs the club and who are its members and sponsors?","Where could funding come from: grants, fundraising, loans?","When is the equipment needed and when is the money in?"],
+      ["F5","Café expansion","A café owner wants to expand. Research the best source of finance.","Compare a bank loan, a grant, leasing and crowdfunding. Interview a small business owner. Check the costs and risks of each.","A recommended finance plan with repayments and cash-flow forecast","Who owns the café and who would lend to it?","Where would the expansion happen and where is the money from?","When is the opening date and over how long is it repaid?"],
+      ["F6","Savings goal","A teenager wants to save for a goal in two years. Compare savings options.","Compare savings accounts, credit union savings and other options. Use regulated sources. Calculate what each earns.","A savings plan showing what the money grows to under each option","Who is saving and what are they saving for?","Where could the money be kept safely?","When is the goal due and how often is money added?"],
+      ["F7","Debt repayment plan","A person with a credit card debt and a loan needs a repayment plan.","Build a realistic invented case. Research interest costs and advice from money advice services. Compare repayment plans.","A plan showing how long and how much under each option","Who is in debt (an invented person) and who can advise them?","Where is the interest highest and where can they get help?","When are payments due and when will the debt be cleared?"],
+      ["F8","Rent or buy","A young couple is deciding whether to rent or buy a home.","Compare monthly costs of renting and buying. Research deposit rules, mortgage costs and fees. Interview an adult.","A comparison and a recommendation with figures and risks","Who is the couple and what do they earn?","Where do they want to live and what do homes cost there?","When do they need a home and for how long will they stay?"],
+      ["F9","Cutting insurance costs","A family wants to reduce its insurance costs.","Compare quotes for car or home insurance. Research what affects the price. Interview an adult about how they shop around.","A plan with savings and the risks of lower cover","Who needs the cover and who provides it?","Where can quotes be compared?","When does the policy renew and when should they shop around?"],
+      ["F10","Closing a funding gap","A community group has a shortfall for a local event or project. Plan how to close it.","Research fundraising ideas, grants and sponsorship. Interview an organiser. Build a budget with income and expenditure.","A funding plan with budget, fundraising actions and a timeline","Who is in the group and who could sponsor or donate?","Where will the money come from and where will events be held?","When is the deadline and what is the timeline?"]
+    ]}
+};
+var CBA2 = {
+  areas: [
+    { key: "visit", name: "Local enterprise visit", color: "var(--a1)", sources: [
+      ["Local Enterprise Offices", "https://www.localenterprise.ie", "Find and learn about local businesses"],
+      ["CSO Ireland", "https://www.cso.ie", "Statistics to back up what you see on a visit"],
+      ["Revenue.ie", "https://www.revenue.ie", "VAT, tax and how businesses pay it"]]},
+    { key: "media", name: "Business in the media", color: "var(--a2)", sources: [
+      ["RTÉ News: Business", "https://www.rte.ie/news/business/", "Irish business news"],
+      ["The Irish Times: Business", "https://www.irishtimes.com/business/", "Irish business reporting"],
+      ["TheJournal.ie: Business", "https://www.thejournal.ie/business/news/", "Irish business news"],
+      ["BBC News: Business", "https://www.bbc.com/news/business", "A second outlet to compare"],
+      ["CCPC", "https://www.ccpc.ie", "Consumer rights and competition information"]]},
+    { key: "leaders", name: "Irish business leaders", color: "var(--a3)", sources: [
+      ["Enterprise Ireland", "https://www.enterprise-ireland.com", "Irish company case studies"],
+      ["Ibec", "https://www.ibec.ie", "Irish business organisation"],
+      ["Local Enterprise Offices", "https://www.localenterprise.ie", "Local owners and success stories"]]},
+    { key: "community", name: "Impact on a community", color: "var(--a4)", sources: [
+      ["CSO Ireland", "https://www.cso.ie", "Local population, jobs and housing figures"],
+      ["Citizens Information", "https://www.citizensinformation.ie", "Local services and community supports"],
+      ["Sport Ireland", "https://www.sportireland.ie", "Sport and club information"],
+      ["Volunteer Ireland", "https://www.volunteer.ie", "Volunteering and community organisations"]]},
+    { key: "consumer", name: "Consumerism", color: "var(--a5)", sources: [
+      ["CCPC", "https://www.ccpc.ie", "Consumer rights, prices and comparisons"],
+      ["ASAI (advertising standards)", "https://www.asai.ie", "Rules for advertising in Ireland"],
+      ["Central Bank consumer hub", "https://www.centralbank.ie/consumer-hub", "Money and financial products"]]},
+    { key: "economy", name: "Economic issue", color: "var(--a6)", sources: [
+      ["CSO Ireland", "https://www.cso.ie", "Official figures on prices, jobs and housing"],
+      ["ESRI", "https://www.esri.ie", "Independent Irish economic research"],
+      ["gov.ie", "https://www.gov.ie", "Government policies and reports"],
+      ["RTÉ News: Business", "https://www.rte.ie/news/business/", "Current coverage"]]},
+    { key: "careers", name: "Careers in business", color: "var(--a7)", sources: [
+      ["CareersPortal", "https://www.careersportal.ie", "Job profiles, pay and routes"],
+      ["Apprenticeship.ie", "https://www.apprenticeship.ie", "Apprenticeships in Ireland"],
+      ["Qualifax", "https://www.qualifax.ie", "Courses and colleges"],
+      ["CSO Ireland", "https://www.cso.ie", "Employment figures"]]}
+  ],
+  rows: [
+    ["A1","visit","Farm or food producer","How does a local farm or food producer get its product to customers, and what are the biggest challenges?","Visit and interview the owner. Photograph the process. Compare with a shop price.","From food just appears in shops to understanding costs and risks","Who grows or makes it, and who buys it?","Where does it go: shop, market, export?","When are the busy seasons and the biggest risks?"],
+    ["A2","visit","Small local shop online","What does it take to run a small local shop in the age of online shopping?","Interview the owner. Observe customers for a short time. Compare prices with an online seller.","Changing how you shop and why","Who shops here and who is the biggest competitor?","Where do customers choose to buy: in store or online?","When did things change and when is the shop busiest?"],
+    ["A3","visit","How a business sets prices","How does a local garage, salon or café decide what to charge?","Interview the owner about costs. Compare prices with two competitors.","Understanding price as more than profit","Who sets the price and who pays it?","Where do the costs come from: rent, wages, stock?","When do prices change and why?"],
+    ["A4","visit","Social media and a local business","How does a local business use social media, and does it work?","Interview the owner. Review the business's posts. Survey ten customers on how they heard about it.","Whether you judge a business by its online presence","Who is the audience and who runs the account?","Where does it post and where do customers find it?","When does it post and when do sales go up?"],
+    ["B1","media","A price change","Why did a product or service you know change its price, and was it fair?","Compare reports from two outlets. Survey ten people on whether they noticed or minded. Check prices elsewhere.","Whether you now see prices differently","Who made the decision and who is affected?","Where was the price changed and where are alternatives?","When did it happen and how long will it last?"],
+    ["B2","media","A big company decision","Why did a well-known company make a big decision (close, expand, rebrand), and who was affected?","Read at least three reports. Look at the company's own statement. Interview someone affected if possible.","Seeing the decision from the point of view of workers, customers and owners","Who decided and who is affected: workers, customers, owners?","Where does it affect people and communities?","When was it announced and what happens next?"],
+    ["B3","media","Recalls and complaints","What happens when a product is recalled or a company is criticised for how it treats customers?","Read news and the company's response. Check consumer rights information. Survey ten people on what they would do.","How your own behaviour as a consumer might change","Who was harmed and who is responsible?","Where was the product sold and where can people complain?","When did the problem start and when was it fixed?"],
+    ["B4","media","Why businesses succeed or fail","Why do some new businesses or products take off while others fail?","Choose one of each. Compare reports and the businesses' own sites. Interview a small business owner.","What you think makes a good business idea","Who were the customers of each business?","Where did each one operate?","When did each launch and when did it succeed or fail?"],
+    ["C1","leaders","An Irish entrepreneur","How did an Irish entrepreneur start a business, and what can a young person learn from them?","Read an interview or profile. Watch or listen to a talk. Email or interview a local owner with a similar story.","Whether starting a business feels more or less possible to you","Who is the entrepreneur and who helped them?","Where did they start and where did they grow?","When did they start and what were the turning points?"],
+    ["C2","leaders","A family business","What makes an Irish family business last across generations?","Interview someone from a family business. Research the business's history. Compare with a business that closed.","Changing what you think success means in business","Who has run it and who works there?","Where has it operated over the years?","When was it founded and what changed over the generations?"],
+    ["C3","leaders","Women and young people in leadership","How do women or young people lead in business, and what barriers have they faced?","Research a named leader. Survey ten classmates on who they see as role models. Interview an adult.","How your view of who can lead has changed","Who is the leader and who were their role models?","Where did they face barriers?","When did they start and when did things change?"],
+    ["C4","leaders","Decisions that grew a company","What decisions made a local business leader's company grow?","Interview the leader or read a profile. Research the company's history and competitors.","What you would do differently as a leader","Who made the key decisions and who advised them?","Where did the business expand?","When were the key decisions made and what happened after?"],
+    ["D1","community","A large local employer","What does one large local employer do for the community, good and bad?","Interview a worker or local councillor. Survey ten residents. Research jobs, traffic and local spending.","Whether your view of local employers has changed","Who works there and who lives nearby?","Where do workers live and spend?","When would the effect be felt most: shifts, closure, expansion?"],
+    ["D2","community","A sports club or youth group","How does a sports club or youth group contribute to your area, economically and socially?","Interview an officer. Observe an event. Research how it is funded.","Understanding the value of organisations that are not for profit","Who runs it, who joins it and who funds it?","Where do members come from and where do they spend?","When are its busiest events and how long has it served the area?"],
+    ["D3","community","If a business closed","What would happen to our town if a major business or shop closed?","Survey residents. Interview a shop owner. Research how other towns coped.","What you think a community should do to protect itself","Who depends on the business: workers, suppliers, customers?","Where would the effect be felt most?","When could it happen and how long would recovery take?"],
+    ["D4","community","Charity shops and social enterprise","What does a charity shop or social enterprise do differently from a normal shop?","Visit and interview a volunteer or manager. Compare pricing and aims with a normal shop.","How it changes where and how you shop","Who runs it and who benefits from the profits?","Where does the stock come from and where does the money go?","When did it start and how does it keep going?"],
+    ["E1","consumer","Advertising and teenagers","How does advertising influence what teenagers buy, and how aware are we of it?","Survey 20 classmates on a few products. Collect and analyse three adverts. Interview a marketing worker if possible.","Whether you see adverts differently","Who makes the adverts and who are they aimed at?","Where do teenagers see them: social media, TV, shops?","When do adverts have the most effect?"],
+    ["E2","consumer","Cheap and replace, or pay more","Is it better to buy cheap and replace, or pay more and keep (for one type of product)?","Compare prices and lifespan for one product, such as shoes or a phone case. Ask ten people for their experience.","How you decide what to buy in future","Who buys each option and why?","Where can you compare prices and quality?","When does the cheaper option stop being cheaper?"],
+    ["E3","consumer","Consumer rights","What rights do I have as a consumer, and do people know them?","Research consumer rights from official sources. Survey ten adults. Interview a shop worker.","How you will act if something goes wrong","Who is protected and who enforces the rights?","Where do you go to complain: shop, online, official bodies?","When do your rights apply: how long after purchase?"],
+    ["E4","consumer","Ethical and sustainable shopping","Does ethical or sustainable shopping make a real difference, and is it affordable?","Compare a normal and a sustainable version of one product. Survey ten people on whether they would pay more.","Whether your attitude to shopping choices changes","Who buys sustainable products and who sells them?","Where can you find them and at what price?","When does it make a difference: now, or over time?"],
+    ["F1","economy","Rising prices","How do rising prices affect a household like mine or a typical household?","Compare prices of a few items over time. Survey adults. Use official price figures.","Whether you see money and prices differently","Who is most affected by price rises?","Where have prices risen most?","When did prices start rising and how fast?"],
+    ["F2","economy","Housing","What does the housing situation mean for young people and for local businesses?","Research rents and earnings figures. Interview an adult. Compare different views.","What you think should be done and how it affects your plans","Who is affected: renters, buyers, employers?","Where is it hardest to find a home?","When did the pressure begin and how long will it last?"],
+    ["F3","economy","Job shortages","Why do some jobs have too few workers, and what could be done?","Pick one sector. Research the issue. Interview a worker or employer. Survey ten people on career interest.","How your view of careers or jobs changes","Who is missing: which workers, which sector?","Where is the shortage greatest?","When did the shortage begin and what has been tried?"],
+    ["F4","economy","Tourism in your area","Is tourism good for our area or does it cause problems?","Research visitor and jobs figures. Interview a business owner and a resident. Observe a busy day.","Your balanced opinion on tourism","Who benefits and who is put under pressure?","Where do visitors go and where do they spend?","When is the peak and what happens off-season?"],
+    ["G1","careers","Running your own business","What is it really like to run your own business, and would I want to?","Interview a self-employed person. Compare income and hours with an employee. Survey ten classmates.","Whether you now want to be your own boss","Who runs the business and who works for it?","Where do they work and where do customers come from?","When do they work and how long to become established?"],
+    ["G2","careers","A day in the job","What does an accountant, marketer or manager actually do each day?","Interview a person in the job. Research the training and pay. Compare with a career you had in mind.","How your view of the job has changed","Who do they work with and for?","Where do they work?","When is the job busiest and what is a typical day?"],
+    ["G3","careers","Apprenticeship or college","How do apprenticeships compare with college for one career?","Interview an apprentice and a graduate. Research cost, pay and length. Compare outcomes.","How you think about your own path after school","Who takes each route and who pays?","Where are the courses and where do you work after?","When does each route start and how long does it take?"],
+    ["G4","careers","Technology and work","How is technology changing a job I am interested in?","Interview a worker. Research the trends. Survey ten adults on what has changed in their jobs.","Whether the job still looks the way you imagined","Who is affected by the change?","Where in the job has technology changed things most?","When did it start and what is coming next?"]
+  ]
+};
+
+/* checklists */
+var CL1 = [
+  "My group knows our task and agrees who does what",
+  "Each of us keeps our own research record (Appendix 1)",
+  "We used desk research and field research",
+  "We evaluated what we found, not just listed it",
+  "Our action plan is clear, costed and justified",
+  "The report is within 1,500 words and well organised",
+  "I wrote my own Student Reflection (Appendix 2)",
+  "We checked our work against the Features of Quality"
+];
+var CL2 = [
+  "My topic is not my Business in Action (CBA 1) project",
+  "I wrote my topic as a question and my teacher approved it",
+  "I did some original research (interview, survey, visit or observation)",
+  "I used at least three sources and checked they are reliable",
+  "I found a second viewpoint",
+  "I wrote what I thought before and what I think now",
+  "I have a clear opinion that my evidence supports",
+  "My presentation fits in three minutes, including audience time",
+  "I chose one or two support materials and have a backup",
+  "I practised aloud at least three times",
+  "I kept my presentation log for the Assessment Task"
+];
+
+/* ---------------------------------------------------------------
+   HELPERS
+---------------------------------------------------------------- */
+var app = document.getElementById("app");
+var stepsEl = document.getElementById("steps");
+var state = { c1opt: "enterprise", c2area: "all" };
+var store = {
+  get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function setSteps(n, color) {
+  var s = stepsEl.children;
+  for (var i = 0; i < s.length; i++) s[i].className = i < n ? "on" : "";
+  document.documentElement.style.setProperty("--accent", color || "var(--red)");
+}
+function render(html) { app.innerHTML = html; window.scrollTo(0, 0); app.focus({ preventScroll: true }); }
+function findTopic(id) {
+  var i, r, o;
+  for (o in CBA1) { for (i = 0; i < CBA1[o].rows.length; i++) { r = CBA1[o].rows[i]; if (r[0] === id) return { cba: 1, key: o, row: r, opt: CBA1[o] }; } }
+  for (i = 0; i < CBA2.rows.length; i++) { r = CBA2.rows[i]; if (r[0] === id) { var a = CBA2.areas.filter(function (x) { return x.key === r[1]; })[0]; return { cba: 2, key: r[1], row: r, opt: a }; } }
+  return null;
+}
+function rowsFor(cba) {
+  if (cba === 1) return CBA1[state.c1opt].rows.map(function (r) { return { id: r[0], title: r[1], text: r[2] }; });
+  return CBA2.rows.filter(function (r) { return state.c2area === "all" || r[1] === state.c2area; })
+    .map(function (r) { return { id: r[0], title: r[2], text: r[3] }; });
+}
+
+/* ---------------------------------------------------------------
+   VIEWS
+---------------------------------------------------------------- */
+function home() {
+  setSteps(1, "var(--red)");
+  document.title = "Business CBA Topic Picker";
+  render(
+    '<p class="steplabel">Step 1 of 3</p>' +
+    '<h1>Which CBA are you working on?</h1>' +
+    '<p class="lead">Pick your Classroom-Based Assessment, then a topic. You will get a brief, focus questions, a checklist and places to start your research.</p>' +
+    '<div class="grid">' +
+    '<a class="card big" style="--accent:var(--ent)" href="#/c1"><span class="tag">CBA 1 &middot; Second year</span><h3>Business in Action</h3><p>A group project (3 to 5 students, up to four weeks). Research, evaluate, make an action plan and write a report. Choose Enterprise, Economics or Finance.</p><span class="meta">30 topic ideas</span></a>' +
+    '<a class="card big" style="--accent:var(--a2)" href="#/c2"><span class="tag">CBA 2 &middot; Third year</span><h3>Presentation</h3><p>An individual investigation and a presentation of up to three minutes, with your own reflection and opinion. It cannot be your CBA 1 topic.</p><span class="meta">28 topic ideas in 7 areas</span></a>' +
+    '</div>' +
+    '<div class="callout warn" style="--accent:#bf8f00"><b>Agree it with your teacher.</b> Your teacher has the final say on your topic, and on any survey, interview or visit. Never use real family finances or personal details.</div>'
+  );
+}
+
+function listView(cba) {
+  var isOne = cba === 1;
+  var color = isOne ? CBA1[state.c1opt].color : "var(--a2)";
+  setSteps(2, color);
+  document.title = (isOne ? "CBA 1" : "CBA 2") + " topics | Business CBA Topic Picker";
+  var chips = "";
+  if (isOne) {
+    chips = Object.keys(CBA1).map(function (k) {
+      return '<button class="chip" type="button" data-opt="' + k + '" aria-pressed="' + (k === state.c1opt) + '">' + esc(CBA1[k].name) + '</button>';
+    }).join("");
+  } else {
+    chips = '<button class="chip" type="button" data-area="all" aria-pressed="' + (state.c2area === "all") + '">All areas</button>' +
+      CBA2.areas.map(function (a) { return '<button class="chip" type="button" data-area="' + a.key + '" aria-pressed="' + (a.key === state.c2area) + '">' + esc(a.name) + '</button>'; }).join("");
+  }
+  var items = rowsFor(cba);
+  var list = items.map(function (r) {
+    var f = findTopic(r.id);
+    var c = isOne ? CBA1[f.key].color : f.opt.color;
+    return '<a class="card topic" style="--accent:' + c + '" href="#/t/' + r.id + '"><span class="id">' + r.id + '</span><span><h3>' + esc(r.title) + '</h3><p>' + esc(r.text) + '</p></span></a>';
+  }).join("");
+  var blurb = isOne ? CBA1[state.c1opt].blurb : "Choose an area to narrow the list, or browse them all. Write your final topic as a question you can answer with your own opinion.";
+  render(
+    '<a class="btn back" href="#/">&larr; Back</a>' +
+    '<p class="steplabel">Step 2 of 3</p>' +
+    '<h1>' + (isOne ? "CBA 1: choose your topic" : "CBA 2: choose your topic") + '</h1>' +
+    '<p class="lead">' + esc(blurb) + '</p>' +
+    '<div class="chips" role="group" aria-label="Filter topics">' + chips + '</div>' +
+    '<div class="row"><button class="btn primary" type="button" id="surprise">Surprise me</button><span class="meta">' + items.length + ' ideas shown</span></div>' +
+    '<div class="grid" style="--accent:' + color + '">' + list + '</div>'
+  );
+  app.querySelectorAll("[data-opt]").forEach(function (b) { b.onclick = function () { state.c1opt = b.getAttribute("data-opt"); listView(1); }; });
+  app.querySelectorAll("[data-area]").forEach(function (b) { b.onclick = function () { state.c2area = b.getAttribute("data-area"); listView(2); }; });
+  document.getElementById("surprise").onclick = function () {
+    var pick = items[Math.floor(Math.random() * items.length)];
+    location.hash = "#/t/" + pick.id;
+  };
+}
+
+function brief(id) {
+  var f = findTopic(id);
+  if (!f) { location.hash = "#/"; return; }
+  var r = f.row, isOne = f.cba === 1;
+  var color = isOne ? f.opt.color : f.opt.color;
+  setSteps(3, color);
+  var title = isOne ? r[1] : r[2];
+  var task = isOne ? r[2] : r[3];
+  var research = isOne ? r[3] : r[4];
+  var outcome = isOne ? r[4] : r[5];
+  var who = isOne ? r[5] : r[6], where = isOne ? r[6] : r[7], when = isOne ? r[7] : r[8];
+  document.title = title + " | Business CBA Topic Picker";
+  var qs = [
+    ["Who", who],
+    ["What", "What exactly are you being asked to do? Put it in your own words: " + task],
+    ["Where", where],
+    ["When", when],
+    ["How", "How will you gather evidence? " + research],
+    ["Why", isOne ? "Why will your plan work? Justify every choice with your findings. You should end with: " + outcome + "." : "Why does it matter, and why has your view changed? Your reflection could be: " + outcome + "."]
+  ];
+  var qHtml = qs.map(function (q) { return '<div class="q"><div class="w">' + q[0] + '</div><p>' + esc(q[1]) + '</p></div>'; }).join("");
+  var list = (isOne ? CL1.concat(f.opt.extra) : CL2);
+  var saved = store.get("bcba-" + id) || [];
+  var checks = list.map(function (t, i) {
+    return '<label class="check"><input type="checkbox" data-i="' + i + '"' + (saved.indexOf(i) > -1 ? " checked" : "") + '><span>' + esc(t) + '</span></label>';
+  }).join("");
+  var links = f.opt.sources.map(function (s) {
+    return '<li><a href="' + esc(s[1]) + '" target="_blank" rel="noopener noreferrer">' + esc(s[0]) + '</a><small>' + esc(s[2]) + '</small></li>';
+  }).join("");
+  var tag = isOne ? "CBA 1 &middot; " + esc(f.opt.name) : "CBA 2 &middot; " + esc(f.opt.name);
+  var rules = isOne
+    ? '<details><summary>Quick rules for CBA 1</summary><ul><li>Group of 3 to 5 students, up to four weeks of class time</li><li>Four areas: research, evaluate, action plan, report (up to 1,500 words)</li><li>Each student keeps a research record and writes their own reflection</li><li>Judged against five Features of Quality, never against other students</li></ul></details>'
+    : '<details><summary>Quick rules for CBA 2</summary><ul><li>Individual, up to three weeks of preparation</li><li>About three minutes per student, including audience time</li><li>You cannot use your Business in Action (CBA 1) topic</li><li>Three Features of Quality: communication and knowledge, support material, reflection</li><li>A written Assessment Task follows, so keep a presentation log</li></ul></details>';
+  render(
+    '<a class="btn back" href="#/' + (isOne ? "c1" : "c2") + '">&larr; All topics</a>' +
+    '<p class="steplabel">Step 3 of 3 &middot; ' + tag + '</p>' +
+    '<h1>' + esc(title) + '</h1>' +
+    '<div class="card" style="--accent:' + color + '"><span class="meta">' + r[0] + '</span><p style="margin:6px 0 0;font-size:18px">' + esc(task) + '</p></div>' +
+    (isOne ? '' : '<div class="callout" style="--accent:' + color + '">Turn this into your own question, narrowed to <b>one aspect</b>, and agree it with your teacher.</div>') +
+    '<h2>Focus questions</h2><div class="card" style="--accent:' + color + '">' + qHtml + '</div>' +
+    '<h2>Your checklist</h2><div class="card" style="--accent:' + color + '"><div class="meta" id="pc"></div><div class="progress"><i id="pb"></i></div>' + checks + '</div>' +
+    '<h2>Where to start looking</h2><div class="card" style="--accent:' + color + '"><ul class="links">' + links + '</ul></div>' +
+    '<div class="callout warn" style="--accent:#bf8f00">These links are starting points, not your evidence. Check the date and author of everything you use, write in your own words and list your sources. Ask your teacher before any interview, survey or visit.</div>' +
+    rules +
+    '<div class="row"><button class="btn" type="button" id="print">Print or save as PDF</button><a class="btn" href="#/' + (isOne ? "c1" : "c2") + '">Pick a different topic</a></div>'
+  );
+  var boxes = app.querySelectorAll('input[type="checkbox"]');
+  function upd() {
+    var done = [], n = 0;
+    boxes.forEach(function (b) { if (b.checked) { n++; done.push(+b.getAttribute("data-i")); } });
+    document.getElementById("pc").textContent = n + " of " + boxes.length + " done";
+    document.getElementById("pb").style.width = (100 * n / boxes.length) + "%";
+    store.set("bcba-" + id, done);
+  }
+  boxes.forEach(function (b) { b.onchange = upd; });
+  upd();
+  document.getElementById("print").onclick = function () { window.print(); };
+}
+
+/* ---------------------------------------------------------------
+   ROUTER
+---------------------------------------------------------------- */
+function route() {
+  var h = location.hash.replace(/^#\/?/, "").split("/");
+  if (h[0] === "c1") listView(1);
+  else if (h[0] === "c2") listView(2);
+  else if (h[0] === "t" && h[1]) brief(decodeURIComponent(h[1]));
+  else home();
+}
+window.addEventListener("hashchange", route);
+
+/* theme toggle */
+(function () {
+  var root = document.documentElement;
+  var saved = store.get("bcba-theme");
+  if (saved) root.setAttribute("data-theme", saved);
+  document.getElementById("theme").onclick = function () {
+    var dark = root.getAttribute("data-theme") ? root.getAttribute("data-theme") === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var next = dark ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    store.set("bcba-theme", next);
+  };
+})();
+route();
+</script>
+</body>
+</html>
